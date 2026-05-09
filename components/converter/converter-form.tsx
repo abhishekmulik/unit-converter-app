@@ -67,24 +67,20 @@ export function ConverterForm() {
         />
         
         {/* Unit Selection Row */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {/* From Unit */}
           <div className="flex flex-col gap-2">
             <Label className="text-sm font-medium">From</Label>
-            <div className="flex items-center gap-2">
-              <div className="flex-1">
-                <UnitSelector
-                  value={fromUnitId}
-                  onChange={setFromUnit}
-                  units={availableUnits}
-                  label="Convert from unit"
-                />
-              </div>
-            </div>
+            <UnitSelector
+              value={fromUnitId}
+              onChange={setFromUnit}
+              units={availableUnits}
+              label="Convert from unit"
+            />
           </div>
           
           {/* Swap Button */}
-          <div className="flex justify-center">
+          <div className="flex justify-center py-1">
             <SwapButton onSwap={swapUnits} />
           </div>
           

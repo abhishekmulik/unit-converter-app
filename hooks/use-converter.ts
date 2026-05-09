@@ -6,6 +6,7 @@ import {
   convert,
   formatResult,
   validateInput,
+  validateTemperature,
   parseInput,
   getCategory,
   getUnit,
@@ -41,6 +42,7 @@ interface UseConverterReturn {
   toUnit: UnitConfig | undefined;
   result: string | null;
   error: string | null;
+  warning: string | null;
   isValid: boolean;
   
   // Actions
@@ -113,6 +115,16 @@ export function useConverter(initialCategory: CategoryId = 'length'): UseConvert
     return validateInput(state.inputValue, allowNegative);
   }, [state.inputValue, currentCategory?.allowNegative]);
   
+  // Memoized temperature warning (only for temperature category)
+  const warning = useMemo(() => {
+    if (state.category !== 'temperature') return null;
+    
+    const parsed = parseInput(state.inputValue);
+    if (parsed === null) return null;
+    
+    return validateTemperature(parsed, state.fromUnitId);
+  }, [state.category, state.inputValue, state.fromUnitId]);
+  
   // Memoized conversion result
   const result = useMemo(() => {
     // Don't compute if invalid or empty
@@ -176,6 +188,7 @@ export function useConverter(initialCategory: CategoryId = 'length'): UseConvert
     toUnit,
     result,
     error: validation.error ?? null,
+    warning,
     isValid: validation.isValid,
     
     // Actions

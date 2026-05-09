@@ -31,6 +31,7 @@ export function ConverterForm() {
     toUnit,
     result,
     error,
+    warning,
     setCategory,
     setInputValue,
     setFromUnit,
@@ -59,8 +60,10 @@ export function ConverterForm() {
           value={inputValue}
           onChange={setInputValue}
           error={error}
+          warning={warning}
           label="Value"
           placeholder="Enter a number"
+          autoFocus
         />
         
         {/* Unit Selection Row */}

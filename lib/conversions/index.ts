@@ -101,25 +101,57 @@ export function formatResult(value: number, precision: number = DEFAULT_PRECISIO
 /**
  * Validate numeric input.
  * 
+ * Handles edge cases:
+ * - Empty input: valid (shows placeholder)
+ * - Partial input ("-", ".", "1."): valid but won't trigger conversion
+ * - Invalid characters: clear error message
+ * - Overflow values: warns about size
+ * - Negative values: context-dependent based on category
+ * 
  * @param input - Raw string input from user
  * @param allowNegative - Whether negative values are permitted
  * @returns Validation result with error message if invalid
  */
 export function validateInput(input: string, allowNegative: boolean): ValidationResult {
+  const trimmed = input.trim();
+  
   // Empty input is valid (just shows no result)
-  if (input.trim() === '') {
+  if (trimmed === '') {
     return { isValid: true };
   }
   
+  // Allow partial input while typing (these are "valid" but won't convert)
+  // This prevents annoying errors when user is mid-typing
+  if (trimmed === '-' || trimmed === '.' || trimmed === '-.' || 
+      trimmed === '+' || trimmed === '+.') {
+    return { isValid: true }; // Valid syntax, just incomplete
+  }
+  
+  // Check for trailing decimal (e.g., "123.")
+  if (/^[+-]?\d+\.$/.test(trimmed)) {
+    return { isValid: true }; // User is typing decimals
+  }
+  
+  // Check for invalid characters (anything not a number, +/-, decimal, or e/E for scientific)
+  if (!/^[+-]?(\d+\.?\d*|\d*\.?\d+)([eE][+-]?\d+)?$/.test(trimmed)) {
+    return { isValid: false, error: 'Please enter a valid number' };
+  }
+  
   // Check for valid number format
-  const value = parseFloat(input);
+  const value = parseFloat(trimmed);
   
   if (isNaN(value)) {
     return { isValid: false, error: 'Please enter a valid number' };
   }
   
   if (!Number.isFinite(value)) {
-    return { isValid: false, error: 'Value is too large or invalid' };
+    return { isValid: false, error: 'Value is too large or too small' };
+  }
+  
+  // Check for extremely large values that might cause display issues
+  if (Math.abs(value) > Number.MAX_SAFE_INTEGER) {
+    // Still valid, but will use scientific notation
+    return { isValid: true };
   }
   
   // Check for negative values when not allowed
@@ -140,4 +172,31 @@ export function parseInput(input: string): number | null {
   
   const value = parseFloat(trimmed);
   return isNaN(value) ? null : value;
+}
+
+/**
+ * Absolute zero constants for temperature validation.
+ */
+const ABSOLUTE_ZERO = {
+  kelvin: 0,
+  celsius: -273.15,
+  fahrenheit: -459.67,
+} as const;
+
+/**
+ * Validate temperature against absolute zero.
+ * Returns a warning if below absolute zero (physically impossible).
+ * 
+ * @param value - The numeric value
+ * @param unitId - The temperature unit ID
+ * @returns Warning message or null if valid
+ */
+export function validateTemperature(value: number, unitId: string): string | null {
+  const minTemp = ABSOLUTE_ZERO[unitId as keyof typeof ABSOLUTE_ZERO];
+  
+  if (minTemp !== undefined && value < minTemp) {
+    return `Temperature cannot be below absolute zero (${minTemp}${unitId === 'kelvin' ? 'K' : unitId === 'celsius' ? '°C' : '°F'})`;
+  }
+  
+  return null;
 }

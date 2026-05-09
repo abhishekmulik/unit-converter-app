@@ -11,10 +11,14 @@ interface InputFieldProps {
   onChange: (value: string) => void;
   /** Error message to display (if any) */
   error?: string | null;
+  /** Warning message to display (if any) */
+  warning?: string | null;
   /** Label for the input */
   label: string;
   /** Placeholder text */
   placeholder?: string;
+  /** Whether to auto-focus on mount */
+  autoFocus?: boolean;
   /** Additional CSS classes */
   className?: string;
 }
@@ -34,11 +38,15 @@ export function InputField({
   value,
   onChange,
   error,
+  warning,
   label,
   placeholder = 'Enter value',
+  autoFocus = false,
   className,
 }: InputFieldProps) {
   const hasError = Boolean(error);
+  const hasWarning = Boolean(warning) && !hasError;
+  const feedbackId = hasError ? 'input-error' : hasWarning ? 'input-warning' : undefined;
   
   return (
     <div className={cn('flex flex-col gap-2', className)}>
@@ -49,19 +57,26 @@ export function InputField({
         id="converter-input"
         type="text"
         inputMode="decimal"
+        autoFocus={autoFocus}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         aria-invalid={hasError}
-        aria-describedby={hasError ? 'input-error' : undefined}
+        aria-describedby={feedbackId}
         className={cn(
           'text-lg font-mono',
-          hasError && 'border-destructive focus-visible:ring-destructive/50'
+          hasError && 'border-destructive focus-visible:ring-destructive/50',
+          hasWarning && 'border-yellow-500 focus-visible:ring-yellow-500/50'
         )}
       />
       {hasError && (
         <p id="input-error" className="text-sm text-destructive" role="alert">
           {error}
+        </p>
+      )}
+      {hasWarning && (
+        <p id="input-warning" className="text-sm text-yellow-600 dark:text-yellow-500" role="status">
+          {warning}
         </p>
       )}
     </div>

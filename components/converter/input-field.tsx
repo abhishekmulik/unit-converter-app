@@ -69,16 +69,19 @@ export function InputField({
           hasWarning && 'border-yellow-500 focus-visible:ring-yellow-500/50'
         )}
       />
-      {hasError && (
-        <p id="input-error" className="text-sm text-destructive" role="alert">
-          {error}
-        </p>
-      )}
-      {hasWarning && (
-        <p id="input-warning" className="text-sm text-yellow-600 dark:text-yellow-500" role="status">
-          {warning}
-        </p>
-      )}
+      {/* Reserved space for feedback message to prevent layout shift */}
+      <div className="min-h-5">
+        {hasError && (
+          <p id="input-error" className="text-sm text-destructive" role="alert">
+            {error}
+          </p>
+        )}
+        {hasWarning && (
+          <p id="input-warning" className="text-sm text-yellow-600 dark:text-yellow-500" role="status">
+            {warning}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

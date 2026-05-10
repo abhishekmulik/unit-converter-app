@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { CategoryId, ConversionCategory } from '@/lib/conversions';
+import { memo } from "react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { CategoryId, ConversionCategory } from "@/lib/conversions";
 
 interface CategoryTabsProps {
   /** Currently selected category */
@@ -14,11 +15,11 @@ interface CategoryTabsProps {
 
 /**
  * Tab navigation for switching between conversion categories.
- * 
+ *
  * This is a controlled component - it receives value and onChange from parent.
  * The parent (useConverter hook) handles resetting units when category changes.
  */
-export function CategoryTabs({ value, onChange, categories }: CategoryTabsProps) {
+function CategoryTabs({ value, onChange, categories }: CategoryTabsProps) {
   return (
     <Tabs
       value={value}
@@ -30,7 +31,7 @@ export function CategoryTabs({ value, onChange, categories }: CategoryTabsProps)
           <TabsTrigger
             key={category.id}
             value={category.id}
-            className="flex-1"
+            className="flex-1 cursor-pointer"
           >
             {category.label}
           </TabsTrigger>
@@ -39,3 +40,5 @@ export function CategoryTabs({ value, onChange, categories }: CategoryTabsProps)
     </Tabs>
   );
 }
+
+export default memo(CategoryTabs);

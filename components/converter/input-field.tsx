@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+import { memo } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 interface InputFieldProps {
   /** Current input value (controlled) */
@@ -25,7 +26,7 @@ interface InputFieldProps {
 
 /**
  * Numeric input field with validation feedback.
- * 
+ *
  * Design decisions:
  * 1. Uses type="text" instead of type="number" for better UX:
  *    - Allows typing "-" and "." without the browser blocking
@@ -34,22 +35,26 @@ interface InputFieldProps {
  * 2. inputMode="decimal" shows numeric keyboard on mobile
  * 3. Error state shown via aria-invalid for accessibility
  */
-export function InputField({
+function InputField({
   value,
   onChange,
   error,
   warning,
   label,
-  placeholder = 'Enter value',
+  placeholder = "Enter value",
   autoFocus = false,
   className,
 }: InputFieldProps) {
   const hasError = Boolean(error);
   const hasWarning = Boolean(warning) && !hasError;
-  const feedbackId = hasError ? 'input-error' : hasWarning ? 'input-warning' : undefined;
-  
+  const feedbackId = hasError
+    ? "input-error"
+    : hasWarning
+      ? "input-warning"
+      : undefined;
+
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
+    <div className={cn("flex flex-col gap-2", className)}>
       <Label htmlFor="converter-input" className="text-sm font-medium">
         {label}
       </Label>
@@ -64,9 +69,9 @@ export function InputField({
         aria-invalid={hasError}
         aria-describedby={feedbackId}
         className={cn(
-          'text-lg font-mono',
-          hasError && 'border-destructive focus-visible:ring-destructive/50',
-          hasWarning && 'border-yellow-500 focus-visible:ring-yellow-500/50'
+          "text-lg font-mono",
+          hasError && "border-destructive focus-visible:ring-destructive/50",
+          hasWarning && "border-yellow-500 focus-visible:ring-yellow-500/50",
         )}
       />
       {/* Reserved space for feedback message to prevent layout shift */}
@@ -77,7 +82,11 @@ export function InputField({
           </p>
         )}
         {hasWarning && (
-          <p id="input-warning" className="text-sm text-yellow-600 dark:text-yellow-500" role="status">
+          <p
+            id="input-warning"
+            className="text-sm text-yellow-600 dark:text-yellow-500"
+            role="status"
+          >
             {warning}
           </p>
         )}
@@ -85,3 +94,5 @@ export function InputField({
     </div>
   );
 }
+
+export default memo(InputField);

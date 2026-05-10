@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
+import { memo } from "react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import type { UnitConfig } from '@/lib/conversions';
+} from "@/components/ui/select";
+import type { UnitConfig } from "@/lib/conversions";
 
 interface UnitSelectorProps {
   /** Currently selected unit ID */
@@ -24,28 +25,30 @@ interface UnitSelectorProps {
 
 /**
  * Dropdown selector for choosing a unit.
- * 
+ *
  * Displays unit label with symbol for clarity.
  * Uses shadcn Select component for consistent styling.
  */
-export function UnitSelector({
+function UnitSelector({
   value,
   onChange,
   units,
   label,
-  placeholder = 'Select unit',
+  placeholder = "Select unit",
 }: UnitSelectorProps) {
   // Find the currently selected unit for display
   const selectedUnit = units.find((u) => u.id === value);
-  
+
   return (
     <Select value={value} onValueChange={onChange}>
       <SelectTrigger className="w-full" aria-label={label}>
         <SelectValue placeholder={placeholder}>
           {selectedUnit && (
             <span>
-              {selectedUnit.label}{' '}
-              <span className="text-muted-foreground">({selectedUnit.symbol})</span>
+              {selectedUnit.label}{" "}
+              <span className="text-muted-foreground">
+                ({selectedUnit.symbol})
+              </span>
             </span>
           )}
         </SelectValue>
@@ -53,7 +56,7 @@ export function UnitSelector({
       <SelectContent>
         {units.map((unit) => (
           <SelectItem key={unit.id} value={unit.id}>
-            {unit.label}{' '}
+            {unit.label}{" "}
             <span className="text-muted-foreground">({unit.symbol})</span>
           </SelectItem>
         ))}
@@ -61,3 +64,5 @@ export function UnitSelector({
     </Select>
   );
 }
+
+export default memo(UnitSelector);

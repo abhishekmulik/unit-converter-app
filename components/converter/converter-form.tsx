@@ -1,22 +1,28 @@
-'use client';
+"use client";
 
-import { useConverter } from '@/hooks/use-converter';
-import { CategoryTabs } from './category-tabs';
-import { UnitSelector } from './unit-selector';
-import { InputField } from './input-field';
-import { ResultDisplay } from './result-display';
-import { SwapButton } from './swap-button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+import { useConverter } from "@/hooks/use-converter";
+import CategoryTabs from "./category-tabs";
+import UnitSelector from "./unit-selector";
+import InputField from "./input-field";
+import ResultDisplay from "./result-display";
+import SwapButton from "./swap-button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 
 /**
  * Main converter form that orchestrates all conversion UI.
- * 
+ *
  * This component:
  * 1. Uses the useConverter hook for all state management
  * 2. Passes props down to controlled child components
  * 3. Handles layout and visual hierarchy
- * 
+ *
  * The form does NOT have a submit button - conversions happen in real-time.
  */
 export function ConverterForm() {
@@ -37,8 +43,8 @@ export function ConverterForm() {
     setFromUnit,
     setToUnit,
     swapUnits,
-  } = useConverter('length');
-  
+  } = useConverter("length");
+
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
@@ -54,7 +60,7 @@ export function ConverterForm() {
           onChange={setCategory}
           categories={availableCategories}
         />
-        
+
         {/* Input Value */}
         <InputField
           value={inputValue}
@@ -65,7 +71,7 @@ export function ConverterForm() {
           placeholder="Enter a number"
           autoFocus
         />
-        
+
         {/* Unit Selection Row */}
         <div className="flex flex-col gap-3">
           {/* From Unit */}
@@ -78,12 +84,12 @@ export function ConverterForm() {
               label="Convert from unit"
             />
           </div>
-          
+
           {/* Swap Button */}
           <div className="flex justify-center py-1">
             <SwapButton onSwap={swapUnits} />
           </div>
-          
+
           {/* To Unit */}
           <div className="flex flex-col gap-2">
             <Label className="text-sm font-medium">To</Label>
@@ -95,7 +101,7 @@ export function ConverterForm() {
             />
           </div>
         </div>
-        
+
         {/* Result Display */}
         <ResultDisplay value={result} unit={toUnit} />
       </CardContent>

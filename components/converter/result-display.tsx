@@ -62,7 +62,7 @@ function ResultDisplay({ value, unit, className }: ResultDisplayProps) {
             size="sm"
             onClick={copyToClipboard}
             aria-label={copied ? "Copied!" : "Copy result"}
-            className="h-7 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className="h-7 gap-1.5 text-xs text-muted-foreground hover:text-foreground cursor-pointer"
           >
             {copied ? (
               <>

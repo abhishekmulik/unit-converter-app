@@ -76,20 +76,23 @@ export function ResultDisplay({ value, unit, className }: ResultDisplayProps) {
           </Button>
         )}
       </div>
-      {hasResult ? (
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl font-mono font-semibold text-foreground">
-            {value}
+      {/* Fixed height container to prevent layout shift */}
+      <div className="h-8 flex items-baseline">
+        {hasResult ? (
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-mono font-semibold text-foreground">
+              {value}
+            </span>
+            <span className="text-lg text-muted-foreground">
+              {unit.symbol}
+            </span>
+          </div>
+        ) : (
+          <span className="text-2xl font-mono text-muted-foreground/50">
+            —
           </span>
-          <span className="text-lg text-muted-foreground">
-            {unit.symbol}
-          </span>
-        </div>
-      ) : (
-        <span className="text-2xl font-mono text-muted-foreground/50">
-          —
-        </span>
-      )}
+        )}
+      </div>
     </div>
   );
 }
